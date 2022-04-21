@@ -18,7 +18,6 @@ sub new ($$) {
 
   die "Instance already exists" if defined $SELF;
   $SELF = bless { conf => $conf }, $class;
-
   $SELF->{queue} = [];
 
   return $SELF;
@@ -29,13 +28,11 @@ sub logmsg ($$) {
   my $conf = $self->{conf};
   my $logline = localtime()." (PID $$): $msg\n";
 
-
   { lock $self->{queue};
     push @{$self->{queue}}, $logline;
   }
 
   $self->flushlogs();
-
   return undef;
 }
 

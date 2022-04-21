@@ -1,5 +1,3 @@
 * Add parallel module execution support (threads or forks)
 * Add special signal handling (e.g. trigger modules)
 * Allow to enable/disable time carry calculation
-* Debian/Ubuntu .debs
-

@@ -1,74 +1,73 @@
-#!/usr/bin/env bash 
-# PerlDaemon (c) 2010, 2011, Dipl.-Inform. (FH) Paul Buetow (http://perldaemon.buetow.org)
+#!/usr/bin/env sh
 
-declare -r ARG=$1
-declare -a LIBPATHS=(./lib ../lib /lib /usr/lib /usr/local/lib /opt/lib)
+export ARG=$1
+export LIBPATHS="./lib ../lib /lib /usr/lib /usr/local/lib /opt/lib"
 
-for path in ${LIBPATHS[@]}; do
-        if [ -f $path/PerlDaemon/PerlDaemon.pl ]; then
-                LIBDIR=$path
-                break
-        fi
+for libpath in $LIBPATHS; do
+  if [ -f $libpath/PerlDaemon/PerlDaemon.pl ]; then
+    LIBDIR=$libpath
+    break
+  fi
 done
 
 if [ -z "$LIBDIR" ]; then
-        echo No PerlDaemon module path found
-        exit 1
+  echo No PerlDaemon module path found
+  exit 1
 fi
 
-start () { 
-        echo Starting daemon now...
-        perl -I$LIBDIR $LIBDIR/PerlDaemon/PerlDaemon.pl config=./conf/perldaemon.conf $@
+function start_it { 
+  echo Starting daemon now...
+  perl -I$LIBDIR $LIBDIR/PerlDaemon/PerlDaemon.pl config=./conf/perldaemon.conf $@
 }
 
-stop () { 
-        if [ -f ./run/perldaemon.pid ]; then
-                echo Stopping daemon now...
-                kill $(cat ./run/perldaemon.pid);
-        else
-                echo "No pidfile found (not running?) "
-        fi
+function stop_it { 
+  if [ -f ./run/perldaemon.pid ]; then
+    echo "Stopping daemon now..."
+    kill `cat ./run/perldaemon.pid`;
+  else
+    echo "No pidfile found (not running?) "
+  fi
 }
 
-logrotate () {
-        echo Triggering a logrotate
-        kill -HUP $(cat ./run/perldaemon.pid)
+function logrotate_it {
+  echo Triggering a logrotate
+  kill -HUP $(cat ./run/perldaemon.pid)
 }
 
-keys () {
-        perl -I$LIBDIR $LIBDIR/PerlDaemon/PerlDaemon.pl config=./conf/perldaemon.conf keys=1 $@
+function keys {
+  perl -I$LIBDIR $LIBDIR/PerlDaemon/PerlDaemon.pl config=./conf/perldaemon.conf keys=1 $@
 }
 
 case $ARG in
-	start)
-                shift
-                start $@
-	;;
+  start)
+    shift
+    start_it $@
+    ;;
 
-	stop)
-                stop
-	;;
+  stop)
+    stop_it
+    ;;
 
-	restart)
-                shift
-                stop 
-                start $@
-	;;
+  restart)
+    shift
+    stop_it 
+    start_it $@
+    ;;
 
-	logrotate)
-                logrotate
-	;;
+  logrotate)
+    logrotate_it
+    ;;
 
-	foreground)
-                start daemon.daemonize=no $@
-	;;
+  foreground)
+    start_it daemon.daemonize=no $@
+    ;;
 
-	keys)
-                keys $@
-	;;
+  keys)
+    keys $@
+    ;;
 
-	*)
-                echo "Usage: $0 <start|stop|restart|logrotate|foreground|keys> [key1=val1 [[key2=val2] ...]]"
-                exit 1
-	;;
+  *)
+    echo "Usage: $0 <start|stop|restart|logrotate|foreground|keys> [key1=val1 [[key2=val2] ...]]"
+    exit 1
+    ;;
 esac

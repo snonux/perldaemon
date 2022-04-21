@@ -1,5 +1,3 @@
-# PerlDaemon (c) 2010, 2011, 2015, Dipl.-Inform. (FH) Paul Buetow (http://perldaemon.buetow.org)
-
 package PerlDaemonModules::ExampleModule2;
 
 use strict;
@@ -9,9 +7,8 @@ sub new ($$$) {
   my ($class, $conf) = @_;
 
   my $self = bless { conf => $conf }, $class;
-
-        # Store some private persistent module stuff
-        $self->{counter} = 0;
+  # Store some private persistent module stuff
+  $self->{counter} = 0;
 
   return $self;
 }

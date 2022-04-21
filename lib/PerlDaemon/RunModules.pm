@@ -1,5 +1,3 @@
-# PerlDaemon (c) 2010, 2011, 2015, Dipl.-Inform. (FH) Paul Buetow (http://perldaemon.buetow.org)
-
 package PerlDaemon::RunModules;
 
 use strict;

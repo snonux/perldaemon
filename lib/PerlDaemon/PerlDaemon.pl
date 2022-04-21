@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-# PerlDaemon (c) 2010, 2011, Dipl.-Inform. (FH) Paul Buetow (http://perldaemon.buetow.org)
-
 use strict;
 use warnings;
 
@@ -166,7 +164,7 @@ sub daemonloop ($) {
     my $timediff = tv_interval($lastrun, $now);
 
     if ($timediff >= $loopinterval) {
-      $lastrun = $now;                                
+      $lastrun = $now;
       $rmodule->do();
       alive $conf;
     }
@@ -218,5 +216,3 @@ if ($conf->{'daemon.daemonize'} ne 'yes') {
 
 sighandlers $conf;
 daemonloop $conf;
-
-
