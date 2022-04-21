@@ -16,12 +16,12 @@ if [ -z "$LIBDIR" ]; then
   exit 1
 fi
 
-function start { 
+function start_it { 
   echo Starting daemon now...
   perl -I$LIBDIR $LIBDIR/PerlDaemon/PerlDaemon.pl config=./conf/perldaemon.conf $@
 }
 
-function stop { 
+function stop_it { 
   if [ -f ./run/perldaemon.pid ]; then
     echo "Stopping daemon now..."
     kill `cat ./run/perldaemon.pid`;
@@ -30,7 +30,7 @@ function stop {
   fi
 }
 
-function logrotate {
+function logrotate_it {
   echo Triggering a logrotate
   kill -HUP $(cat ./run/perldaemon.pid)
 }
@@ -42,25 +42,25 @@ function keys {
 case $ARG in
   start)
     shift
-    start $@
+    start_it $@
     ;;
 
   stop)
-    stop
+    stop_it
     ;;
 
   restart)
     shift
-    stop 
-    start $@
+    stop_it 
+    start_it $@
     ;;
 
   logrotate)
-    logrotate
+    logrotate_it
     ;;
 
   foreground)
-    start daemon.daemonize=no $@
+    start_it daemon.daemonize=no $@
     ;;
 
   keys)
