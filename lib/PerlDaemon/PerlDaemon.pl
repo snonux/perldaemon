@@ -5,7 +5,6 @@
 use strict;
 use warnings;
 
-use Shell qw(mv);
 use POSIX qw(setsid strftime);
 use Time::HiRes qw(gettimeofday tv_interval);
 

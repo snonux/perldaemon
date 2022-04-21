@@ -3,7 +3,6 @@ package PerlDaemon::Logger;
 use strict;
 use warnings;
 
-use Shell qw(mv);
 use POSIX qw(strftime);
 
 $| = 1;
@@ -79,7 +78,7 @@ sub rotatelog ($) {
   $self->logmsg('Rotating logfile');
 
   my $timestr = strftime "%Y%m%d-%H%M%S", localtime();
-  mv($logfile, "$logfile.$timestr");  
+  `mv $logfile $logfile.$timestr`;
 
   return undef;
 }
