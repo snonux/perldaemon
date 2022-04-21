@@ -4,7 +4,6 @@ package PerlDaemon::RunModules;
 
 use strict;
 use warnings;
-use threads qw(exit stringify);
 use Time::HiRes qw(gettimeofday tv_interval);
 
 sub new ($$) {
@@ -82,7 +81,6 @@ sub do ($) {
 
         $scheduler->{$k}{lastrun} = $now;
         $v->do();
-
       }
     }
   }

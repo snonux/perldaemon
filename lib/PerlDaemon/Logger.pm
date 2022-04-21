@@ -2,8 +2,6 @@ package PerlDaemon::Logger;
 
 use strict;
 use warnings;
-use threads;
-use threads::shared;
 
 use Shell qw(mv);
 use POSIX qw(strftime);
@@ -23,7 +21,6 @@ sub new ($$) {
   $SELF = bless { conf => $conf }, $class;
 
   $SELF->{queue} = [];
-  share $SELF->{queue};
 
   return $SELF;
 }

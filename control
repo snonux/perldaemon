@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 # PerlDaemon (c) 2010, 2011, 2015 Dipl.-Inform. (FH) Paul Buetow (http://perldaemon.buetow.org)
 
-declare -r ARG=$1
-declare -a LIBPATHS=(./lib ../lib /lib /usr/lib /usr/local/lib /opt/lib)
+export ARG=$1
+export LIBPATHS="./lib ../lib /lib /usr/lib /usr/local/lib /opt/lib"
 
-for path in ${LIBPATHS[@]}; do
-  if [ -f $path/PerlDaemon/PerlDaemon.pl ]; then
-    LIBDIR=$path
+for libpath in $LIBPATHS; do
+  if [ -f $libpath/PerlDaemon/PerlDaemon.pl ]; then
+    LIBDIR=$libpath
     break
   fi
 done
@@ -16,26 +16,26 @@ if [ -z "$LIBDIR" ]; then
   exit 1
 fi
 
-start () { 
+function start { 
   echo Starting daemon now...
   perl -I$LIBDIR $LIBDIR/PerlDaemon/PerlDaemon.pl config=./conf/perldaemon.conf $@
 }
 
-stop () { 
+function stop { 
   if [ -f ./run/perldaemon.pid ]; then
-    echo Stopping daemon now...
-    kill $(cat ./run/perldaemon.pid);
+    echo "Stopping daemon now..."
+    kill `cat ./run/perldaemon.pid`;
   else
     echo "No pidfile found (not running?) "
   fi
 }
 
-logrotate () {
+function logrotate {
   echo Triggering a logrotate
   kill -HUP $(cat ./run/perldaemon.pid)
 }
 
-keys () {
+function keys {
   perl -I$LIBDIR $LIBDIR/PerlDaemon/PerlDaemon.pl config=./conf/perldaemon.conf keys=1 $@
 }
 
