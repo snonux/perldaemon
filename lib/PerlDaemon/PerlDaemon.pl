@@ -93,7 +93,7 @@ sub readconf ($%) {
   # Check
   my $msg = 'Missing property:';
 
-  foreach (qw(wd loopinterval alivefile pidfile logfile daemonize)) {
+  foreach (qw(wd interval alivefile pidfile logfile daemonize)) {
     my $key = "daemon.$_";
     die "$msg $key\n" unless exists $conf{$key};
   }
@@ -154,7 +154,7 @@ sub alive ($) {
 sub daemonloop ($) {
   my $conf = shift;
   my $rmodule = PerlDaemon::RunModules->new($conf);
-  my $loopinterval = $conf->{'daemon.loopinterval'};
+  my $interval = $conf->{'daemon.interval'};
 
   my $loop = shift;
   my $lastrun = [0,0];
@@ -163,13 +163,13 @@ sub daemonloop ($) {
     my $now = [gettimeofday];
     my $timediff = tv_interval($lastrun, $now);
 
-    if ($timediff >= $loopinterval) {
+    if ($timediff >= $interval) {
       $lastrun = $now;
       $rmodule->do();
       alive $conf;
     }
 
-    sleep $loopinterval / 10;
+    sleep $interval / 10;
   }
 }
 

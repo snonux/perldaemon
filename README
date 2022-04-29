@@ -46,7 +46,7 @@ pb@titania:~/svn/utils/perldaemon/trunk$ ./control keys
 daemon.logfile=./log/perldaemon.log
 
 # The amount of seconds until the next event look takes place
-daemon.loopinterval=1
+daemon.interval=2
 
 # Path to the modules dir
 daemon.modules.dir=./lib/PerlDaemonModules
@@ -57,10 +57,7 @@ daemon.daemonize=yes
 # Path to the pidfile
 daemon.pidfile=./run/perldaemon.pid
 
-# Each module should run every runinterval seconds
-daemon.modules.runinterval=3
-
-# Path to the alive file (is touched every loopinterval seconds, usable to monitor)
+# Path to the alive file (is touched every interval seconds, usable to monitor)
 daemon.alivefile=./run/perldaemon.alive
 
 # Specifies the working directory
@@ -68,11 +65,11 @@ daemon.wd=./
 
 So lets start the daemon using as its loop interval 10 seconds:
 
-$ ./control keys | grep daemon.loopinterval
-daemon.loopinterval=1
-$ ./control keys daemon.loopinterval=10 | grep daemon.loopinterval
-daemon.loopinterval=10
-$ ./control start daemon.loopinterval=10; sleep 10; tail -n 2 log/perldaemon.log
+$ ./control keys | grep daemon.interval
+daemon.interval=1
+$ ./control keys daemon.interval=10 | grep daemon.interval
+daemon.interval=10
+$ ./control start daemon.interval=10; sleep 10; tail -n 2 log/perldaemon.log
 Starting daemon now...
 Mon Jun 13 11:29:27 2011 (PID 2838): Triggering PerlDaemonModules::ExampleModule 
 (last triggered before 10.002106s; carry: 7.002106s; wanted interval: 3s)
@@ -81,7 +78,7 @@ $ ./control stop
 Stopping daemon now...
 
 If you want to change that property forever either edit perldaemon.conf or do this:
-$ ./control keys daemon.loopinterval=10 > new.conf; mv new.conf conf/perldaemon.conf
+$ ./control keys daemon.interval=10 > new.conf; mv new.conf conf/perldaemon.conf
 
 04. HIGH RESOLUTION SCHEDULING TIME
 

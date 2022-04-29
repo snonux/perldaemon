@@ -36,7 +36,7 @@ sub new ($$) {
         $scheduler{$name}{lastrun} = [0,0];
         $scheduler{$name}{carrysum} = 0;
         $scheduler{$name}{firstloop} = 1;
-        $scheduler{$name}{interval} = $conf->{'daemon.modules.runinterval'};
+        $scheduler{$name}{interval} = $conf->{'daemon.interval'};
         $logger->logmsg("Created module instance $name");
       }
     }
